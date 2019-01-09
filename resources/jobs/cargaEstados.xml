@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:batch="http://www.springframework.org/schema/batch" xmlns:jobs="http://www.intellinx-sw.com/schema/jobs" xmlns:utils="http://www.intellinx-sw.com/schema/utils" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/batch
+http://www.springframework.org/schema/batch/spring-batch.xsd
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.intellinx-sw.com/schema/jobs
+http://www.intellinx-sw.com/schema/jobs/intellinx-jobs.xsd
+http://www.intellinx-sw.com/schema/utils
+http://www.intellinx-sw.com/schema/utils/intellinx-utils.xsd">
+
+	<!-- JOB DEFINITION: cargaEstados	-->
+	
+	<jobs:job-descriptor group="default"/>
+	
+	<!-- JOB -->
+	<jobs:job id="cargaEstados" incrementer="jobParametersTimestampIncrementer">
+		<jobs:description/>
+<batch:step id="step">
+		<batch:tasklet>
+			<batch:chunk commit-interval="50" reader="jdbc-reader" writer="bom-writer"/>
+		</batch:tasklet>
+	</batch:step>
+  </jobs:job>
+
+<bean class="org.springframework.batch.item.database.JdbcCursorItemReader" id="jdbc-reader" scope="step">
+		<property name="dataSource" ref="MULPSII1"/>
+		<property name="sql">
+			<value>
+				<![CDATA[
+					select
+	CODIGO_ESTADO,
+	DESCRIPCION,
+	DESCRIPCION_ABREVIADA
+ from CAT_ESTADO
+ where ID_PAIS_REGISTRO = 1
+				]]>
+			</value>
+		</property>
+		<property name="rowMapper" ref="resultset-entity-mapper"/>
+		
+	</bean>
+
+<jobs:resultset-to-entity-mapper id="resultset-entity-mapper">
+		<utils:entity-resolver autowire-by-name="true" entity-class="com.inbursa.model.be.EstadoBE">
+			<utils:field-mappings>
+<utils:field name="codigoEstado" value="%{CODIGO_ESTADO}"></utils:field>
+<utils:field name="descripcion" value="%{DESCRIPCION}"></utils:field>
+<utils:field name="descripcionAbreviada" value="%{DESCRIPCION_ABREVIADA}"></utils:field></utils:field-mappings>
+		</utils:entity-resolver>
+	</jobs:resultset-to-entity-mapper>
+
+<jobs:bom-writer id="bom-writer" mode="MERGE" persister="defaultBomPersister"/>
+</beans>

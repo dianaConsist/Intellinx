@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alert-configuration version="513040">
+    <alert-severities/>
+    <alert-title>El usuario: ${userBE.userID}, consulto 3 veces la cuenta: ${cuenta.numeroCuenta}</alert-title>
+    <alert-type>AlertaConsultaCuentas</alert-type>
+    <display-name>Target Consultar Cuentas</display-name>
+    <fields-mappings>
+        <fields-mapping>
+            <field-name>userBE</field-name>
+            <value>last_incident_object.userBE</value>
+        </fields-mapping>
+        <fields-mapping>
+            <field-name>cuenta</field-name>
+            <value>last_incident_object.cuenta</value>
+        </fields-mapping>
+    </fields-mappings>
+    <incident-accumulation>
+        <method>ON_EACH_ALERT_GENERATION</method>
+        <period>0</period>
+    </incident-accumulation>
+    <name>TargetConsultarCuentas</name>
+    <owner>ic_admin</owner>
+    <workspace>generalWorkspace</workspace>
+</alert-configuration>

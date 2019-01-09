@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scoring-configuration version="513030">
+    <active>true</active>
+    <active-lists>
+        <evaluation-type>STOP_ON_FIRST</evaluation-type>
+    </active-lists>
+    <created-by>ic_admin</created-by>
+    <cutting-score>70</cutting-score>
+    <date-created>2019-01-04T16:43:49.559-03:00</date-created>
+    <date-modified>2019-01-04T17:09:09.842-03:00</date-modified>
+    <default-incidents-period period="180" timeUnit="DAYS"/>
+    <display-name>ComportamientoUsuarioFueraHorario</display-name>
+    <incident-scoring-configuration>
+        <active>true</active>
+        <active-lists/>
+        <columns>
+            <column>
+                <displayName>Condition</displayName>
+                <name>condition</name>
+            </column>
+        </columns>
+        <entity-mappings/>
+        <expiration period="180" timeUnit="DAYS"/>
+        <incident-type>IncidenteFueradeHorario</incident-type>
+        <never-expire>true</never-expire>
+        <rule-id>R01_FueradeHora</rule-id>
+        <scoring-rules>
+            <rule>
+                <condition name="condition">
+                    <value>true</value>
+                </condition>
+                <score>70</score>
+            </rule>
+        </scoring-rules>
+    </incident-scoring-configuration>
+    <modified-by>ic_admin</modified-by>
+    <name>ComportamientoUsuarioFueraHorario</name>
+</scoring-configuration>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<list><item display="Domingo" value="6"/>
+	<item display="Lunes" value="0"/>
+<item display="Martes" value="1"/>
+<item display="Miercoles" value="2"/>
+<item display="Jueves" value="3"/>
+<item display="Viernes" value="4"/>
+<item display="Sabado" value="5"/>
+</list>

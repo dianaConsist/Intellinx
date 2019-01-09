@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<flow-function>
+	<name>fr006_MovCargo01</name>
+	<description></description>
+	<return-type>Void</return-type>
+	<arguments>
+		<argument name="movCargoFact01" type="MovCargoFact01"></argument>
+	</arguments>
+	<attributes>
+		<attribute name="rule_template" value="fr006_MovCargo01"></attribute>
+		<attribute name="rule_configuration" value="ConfiguracionConsultas"></attribute>
+		<attribute name="incident_type" value="Inc006_MovCargo01"></attribute>
+	</attributes>
+	<script>
+	<![CDATA[try{
+	//user-section(genrateIncident){{
+	var _incident_to_generate = new Inc006_MovCargo01();
+	_incident_to_generate.timestamp = movCargoFact01.fecha;
+	_incident_to_generate.fecha = movCargoFact01.fecha;
+	_incident_to_generate.cliente = movCargoFact01.cliente;
+	_incident_to_generate.descripcion1 = movCargoFact01.descripcion1;
+	_incident_to_generate.idTransaccion = movCargoFact01.idTransaccion;
+	_incident_to_generate.descripcion = movCargoFact01.descripcion;
+	_incident_to_generate.idPersona = movCargoFact01.idPersona;
+	_incident_to_generate.cuenta = movCargoFact01.cuenta;
+	_incident_to_generate.monto = movCargoFact01.monto;
+	_incident_to_generate.addDataSet("movCargoFact01", {movCargoFact01});
+	RuleEngine.generateIncident(_incident_to_generate);
+	//}}user-section
+}catch(e){
+	//user-section(execute_function){{
+	traceInfo(e.Message);
+	//}}user-section
+}
+]]></script>
+</flow-function>

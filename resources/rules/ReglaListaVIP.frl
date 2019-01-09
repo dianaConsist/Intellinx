@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<flow-function>
+	<name>ReglaListaVIP</name>
+	<description></description>
+	<return-type>Void</return-type>
+	<arguments>
+		<argument name="interaccionCuentaFact" type="InteraccionCuentaFact"></argument>
+	</arguments>
+	<attributes>
+		<attribute name="rule_template" value="ReglaListaVIP"></attribute>
+		<attribute name="rule_configuration" value="ConfiguracionListaVIP"></attribute>
+		<attribute name="incident_type" value="ConsultaVIP"></attribute>
+	</attributes>
+	<script>
+	<![CDATA[try{
+	if(RuleEngine.isActiveListMember("ListaVIP1_2", interaccionCuentaFact.cuenta)){
+		//user-section(genrateIncident){{
+		var _incident_to_generate = new ConsultaVIP();
+		_incident_to_generate.timestamp = interaccionCuentaFact.timestamp;
+		_incident_to_generate.clienIP = interaccionCuentaFact.clientIP;
+		_incident_to_generate.uRL = interaccionCuentaFact.uRL;
+		_incident_to_generate.userBE = interaccionCuentaFact.userBE;
+		_incident_to_generate.cuenta = interaccionCuentaFact.cuenta;
+		_incident_to_generate.addDataSet("interaccionCuentaFact", {interaccionCuentaFact});
+		RuleEngine.generateIncident(_incident_to_generate);
+		//}}user-section
+		//user-section(execute_function){{
+		traceInfo("RListaVIP: Cuenta recibida: " + interaccionCuentaFact.cuenta.numeroCuenta + " Resultado de busqueda: " + ToString(RuleEngine.isActiveListMember("ListaVIP", interaccionCuentaFact.cuenta)));
+		//}}user-section
+	}
+}catch(e){
+	//user-section(execute_function){{
+	traceInfo(e.Message);
+	//}}user-section
+}
+]]></script>
+</flow-function>

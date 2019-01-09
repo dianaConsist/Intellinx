@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:batch="http://www.springframework.org/schema/batch" xmlns:jobs="http://www.intellinx-sw.com/schema/jobs" xmlns:utils="http://www.intellinx-sw.com/schema/utils" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/batch
+http://www.springframework.org/schema/batch/spring-batch.xsd
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.intellinx-sw.com/schema/jobs
+http://www.intellinx-sw.com/schema/jobs/intellinx-jobs.xsd
+http://www.intellinx-sw.com/schema/utils
+http://www.intellinx-sw.com/schema/utils/intellinx-utils.xsd">
+
+	<!-- JOB DEFINITION: j003_CargaCuentasVIP_v1_2	-->
+	
+	<jobs:job-descriptor group="default"/>
+	
+	<!-- JOB -->
+	<jobs:job id="j003_CargaCuentasVIP_v1_2" incrementer="jobParametersTimestampIncrementer">
+		<jobs:description/>
+<batch:step id="step">
+		<batch:tasklet>
+			<batch:chunk commit-interval="50" reader="file-reader" writer="bom-writer"/>
+		</batch:tasklet>
+	</batch:step>
+  </jobs:job>
+
+<bean class="org.springframework.batch.item.file.FlatFileItemReader" id="file-reader" scope="step">
+		<property name="resource" value="file:#{jobParameters['input.file.name']}"/>
+		<property name="encoding" value="UTF-8"/>
+		<property name="comments" value="//"/>
+		<property name="linesToSkip" value="1"/>
+		<property name="lineMapper">
+			<bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+				<property name="lineTokenizer">
+					<bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
+						<property name="names" value="Cuenta"/>
+						<property name="delimiter" value=","/>
+						<property name="strict" value="false"/>
+					</bean>
+				</property>
+				<property name="fieldSetMapper" ref="fieldset-entity-mapper"/>
+			</bean>
+		</property>
+	</bean>
+
+<jobs:fieldset-to-entity-mapper id="fieldset-entity-mapper">
+		<utils:entity-resolver autowire-by-name="true" entity-class="com.inbursa.model.activelists.ListaVIP1_2">
+			<utils:field-mappings>
+<utils:field name="cuenta.numeroCuenta" value="%{Cuenta}"></utils:field>
+<utils:field name="comment" value="CuentaVIP1_2"></utils:field>
+<utils:field name="effective" value="true"></utils:field>
+<utils:field name="expireAt" value="%{#toDate('2100-01-02','yyyy-MM-dd')}"></utils:field></utils:field-mappings>
+		</utils:entity-resolver>
+	</jobs:fieldset-to-entity-mapper>
+
+<jobs:bom-writer id="bom-writer" mode="MERGE" persister="defaultBomPersister"/>
+</beans>

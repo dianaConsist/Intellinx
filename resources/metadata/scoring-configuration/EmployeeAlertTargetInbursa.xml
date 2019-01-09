@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scoring-configuration version="513030">
+    <active-lists>
+        <evaluation-type>STOP_ON_FIRST</evaluation-type>
+    </active-lists>
+    <created-by>ic_admin</created-by>
+    <cutting-score>70</cutting-score>
+    <date-created>2019-01-08T19:05:03.358-06:00</date-created>
+    <date-modified>2019-01-08T19:05:53.184-06:00</date-modified>
+    <default-incidents-period period="180" timeUnit="DAYS"/>
+    <description>Employee Alert Target Inbursa</description>
+    <display-name>Employee Alert Target Inbursa</display-name>
+    <incident-scoring-configuration>
+        <active>true</active>
+        <active-lists/>
+        <columns>
+            <column>
+                <displayName>Condition</displayName>
+                <name>condition</name>
+            </column>
+        </columns>
+        <entity-mappings>
+            <entity-mapping>
+                <alert-target-field>userBEInbursa</alert-target-field>
+                <incident-field>userInbursa</incident-field>
+            </entity-mapping>
+        </entity-mappings>
+        <expiration period="180" timeUnit="DAYS"/>
+        <incident-type>AfterHoursLogonInbursa</incident-type>
+        <rule-id>R01_After_Hours_Logon_Inbursa</rule-id>
+        <scoring-rules>
+            <rule>
+                <condition name="condition">
+                    <value>true</value>
+                </condition>
+                <score>50</score>
+            </rule>
+        </scoring-rules>
+    </incident-scoring-configuration>
+    <modified-by>ic_admin</modified-by>
+    <name>EmployeeAlertTargetInbursa</name>
+</scoring-configuration>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<flow-function>
+	<name>ReglaListaVIP_bitac</name>
+	<description></description>
+	<return-type>Void</return-type>
+	<arguments>
+		<argument name="consultaMulCuentaBitaFact" type="ConsultaMulCuentaBitaFact"></argument>
+	</arguments>
+	<attributes>
+		<attribute name="rule_template" value="ReglaListaVIP_bitac"></attribute>
+		<attribute name="rule_configuration" value="ConfiguracionListaVIP"></attribute>
+		<attribute name="incident_type" value="ConsultaVIP_bitac"></attribute>
+	</attributes>
+	<script>
+	<![CDATA[try{
+	if(RuleEngine.isActiveListMember("ListaVIP", consultaMulCuentaBitaFact.cuenta)){
+	}
+	//user-section(genrateIncident){{
+	var _incident_to_generate = new ConsultaVIP_bitac();
+	_incident_to_generate.timestamp = consultaMulCuentaBitaFact.timestamp;
+	_incident_to_generate.sucursal = consultaMulCuentaBitaFact.sucursal;
+	_incident_to_generate.fecha = consultaMulCuentaBitaFact.fecha;
+	_incident_to_generate.idBitacora = consultaMulCuentaBitaFact.idBitacora;
+	_incident_to_generate.nombreAplicacion = consultaMulCuentaBitaFact.nombreAplicacion;
+	_incident_to_generate.descripcion = consultaMulCuentaBitaFact.descripcion;
+	_incident_to_generate.userBE = consultaMulCuentaBitaFact.userBE;
+	_incident_to_generate.cuenta = consultaMulCuentaBitaFact.cuenta;
+	_incident_to_generate.ip = consultaMulCuentaBitaFact.ip;
+	_incident_to_generate.addDataSet("consultaMulCuentaBitaFact", {consultaMulCuentaBitaFact});
+	RuleEngine.generateIncident(_incident_to_generate);
+	//}}user-section
+	//user-section(execute_function){{
+	traceInfo("RListaVIP_bitac: Cuenta recibida: " + consultaMulCuentaBitaFact.cuenta.numeroCuenta + " Resultado de busqueda: " + ToString(RuleEngine.isActiveListMember("ListaVIP", consultaMulCuentaBitaFact.cuenta)));
+	//}}user-section
+}catch(e){
+	//user-section(execute_function){{
+	traceInfo(e.Message);
+	//}}user-section
+}
+]]></script>
+</flow-function>

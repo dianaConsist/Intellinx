@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scoring-configuration version="513030">
+    <active-lists/>
+    <cutting-score>70</cutting-score>
+    <default-incidents-period period="180" timeUnit="DAYS"/>
+    <description/>
+    <display-name>Target Lista VIP</display-name>
+    <name>TargetListaVIP</name>
+</scoring-configuration>

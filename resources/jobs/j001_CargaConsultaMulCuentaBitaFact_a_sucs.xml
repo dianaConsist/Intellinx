@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:batch="http://www.springframework.org/schema/batch" xmlns:jobs="http://www.intellinx-sw.com/schema/jobs" xmlns:utils="http://www.intellinx-sw.com/schema/utils" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/batch
+http://www.springframework.org/schema/batch/spring-batch.xsd
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.intellinx-sw.com/schema/jobs
+http://www.intellinx-sw.com/schema/jobs/intellinx-jobs.xsd
+http://www.intellinx-sw.com/schema/utils
+http://www.intellinx-sw.com/schema/utils/intellinx-utils.xsd">
+
+	<!-- JOB DEFINITION: j001_CargaConsultaMulCuentaBitaFact_a_sucs	-->
+	
+	<jobs:job-descriptor group="default"/>
+	
+	<!-- JOB -->
+	<jobs:job id="j001_CargaConsultaMulCuentaBitaFact_a_sucs" incrementer="jobParametersTimestampIncrementer">
+		<jobs:description>Carga eventos de consulta de cuenta MUL_CUENTA realizados en sucursales. Los eventos se extraen de V_BITACORA.</jobs:description>
+<batch:step id="step">
+		<batch:tasklet>
+			<batch:chunk commit-interval="50" reader="jdbc-reader" writer="bom-writer"/>
+		</batch:tasklet>
+	</batch:step>
+  </jobs:job>
+
+<bean class="org.springframework.batch.item.database.JdbcCursorItemReader" id="jdbc-reader" scope="step">
+		<property name="dataSource" ref="MULPSII1"/>
+		<property name="sql">
+			<value>
+				<![CDATA[
+select 
+	ID_BITACORA,
+	DESCRIPCION,
+	NOMBRE_CAMPO,
+	VALOR1,
+	FECHA,
+	USUARIO,
+	NOMBRE_USUARIO,
+	SUCURSAL,
+	NOMBRE_SUCURSAL,
+	IP,
+	NOMBRE_APLICACION
+from V_BITACORA
+where
+	ID_CLASE in ('40')
+	and ID_ATRIBUTO in ('293')
+  and ID_ATRIBUTO_FILTRO in ('293')
+	and  SUCURSAL not in ('11401','19301','49100','39100')
+  and FECHA >= TO_DATE(to_char(sysdate-30/1440,'DD/MM/RR HH24:MI')||':00','DD/MM/RR HH24:MI:SS') and FECHA < TO_DATE(to_char(sysdate-20/1440,'DD/MM/RR HH24:MI')||':00','DD/MM/RR HH24:MI:SS')
+]]>
+			</value>
+		</property>
+		<property name="rowMapper" ref="resultset-entity-mapper"/>
+		
+	</bean>
+
+<jobs:resultset-to-entity-mapper id="resultset-entity-mapper">
+		<utils:entity-resolver autowire-by-name="true" entity-class="com.inbursa.model.fact.ConsultaMulCuentaBitaFact">
+			<utils:field-mappings>
+<utils:field name="idBitacora" value="%{ID_BITACORA}"></utils:field>
+<utils:field name="descripcion" value="%{DESCRIPCION}"></utils:field>
+<utils:field name="nombreCampo" value='%{NOMBRE_CAMPO}'></utils:field>
+<utils:field name="cuenta.numeroCuenta" value="%{VALOR1}"></utils:field>
+<utils:field name="fecha" value="%{FECHA}"></utils:field>
+<utils:field name="userBE.userID" value="%{USUARIO}"></utils:field>
+<utils:field name="userBE.nombreEmpleado" value="%{NOMBRE_USUARIO}"></utils:field>
+<utils:field name="sucursal.idOficina" value="%{SUCURSAL}"></utils:field>
+<utils:field name="sucursal.nombreSucursal" value="%{NOMBRE_SUCURSAL}"></utils:field>
+<utils:field name="ip" value="%{IP}"></utils:field>
+<utils:field name="nombreAplicacion" value="%{NOMBRE_APLICACION}"></utils:field></utils:field-mappings>
+		</utils:entity-resolver>
+	</jobs:resultset-to-entity-mapper>
+
+<jobs:bom-writer id="bom-writer" mode="PERSIST" persister="defaultBomPersister"/>
+
+<jobs:flow-rules-processor id="flowRulesProcessor" rules-execution-set="ReglasMFBita_Consultas"></jobs:flow-rules-processor>
+</beans>

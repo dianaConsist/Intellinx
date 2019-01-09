@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<flow-function>
+	<name>After_Hours_Logon_Inbursa</name>
+	<description>After_Hours_Logon Inbursa</description>
+	<return-type>Void</return-type>
+	<arguments>
+		<argument name="userLogOnFactInbursa" type="UserLogOnFactInbursa"></argument>
+	</arguments>
+	<attributes>
+		<attribute name="rule_template" value="After_Hours_Logon_Inbursa"></attribute>
+		<attribute name="rule_configuration" value="WorkingHoursConfigurationInbursa"></attribute>
+		<attribute name="incident_type" value="AfterHoursLogonInbursa"></attribute>
+	</attributes>
+	<script>
+	<![CDATA[try{
+	if(userLogOnFactInbursa.timestamp.hour < openingHourInbursa Or userLogOnFactInbursa.timestamp.hour > closingHourInbursa Or userLogOnFactInbursa.timestamp.dayOfWeek < firstDayInbursa Or userLogOnFactInbursa.timestamp.dayOfWeek > lastDayInbursa){
+		//user-section(genrateIncident){{
+		var _incident_to_generate = new AfterHoursLogonInbursa();
+		_incident_to_generate.timestamp = userLogOnFactInbursa.timestamp;
+		_incident_to_generate.id = ruleId;
+		_incident_to_generate.dataSource = userLogOnFactInbursa.dataSource;
+		_incident_to_generate.userInbursa = userLogOnFactInbursa.userBE;
+		_incident_to_generate.iPAddress = userLogOnFactInbursa.clientIP;
+		_incident_to_generate.addDataSet("userLogOnFactInbursa", {userLogOnFactInbursa});
+		RuleEngine.generateIncident(_incident_to_generate);
+		//}}user-section
+	}
+}catch(e){
+	//user-section(execute_function){{
+	traceInfo(e.Message);
+	//}}user-section
+}
+]]></script>
+</flow-function>

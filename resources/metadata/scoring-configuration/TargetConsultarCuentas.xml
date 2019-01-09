@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scoring-configuration version="513040">
+    <active-lists>
+        <evaluation-type>STOP_ON_FIRST</evaluation-type>
+    </active-lists>
+    <created-by>ic_admin</created-by>
+    <cutting-score>30</cutting-score>
+    <date-created>2016-09-08T16:46:56.033-05:00</date-created>
+    <date-modified>2016-09-08T16:51:03.089-05:00</date-modified>
+    <default-incidents-period period="1" timeUnit="DAYS"/>
+    <display-name>Target Consultar Cuentas</display-name>
+    <incident-scoring-configuration>
+        <active>true</active>
+        <active-lists/>
+        <columns>
+            <column>
+                <displayName>Condition</displayName>
+                <name>condition</name>
+            </column>
+        </columns>
+        <discard-incidents-with-zero-score>true</discard-incidents-with-zero-score>
+        <entity-mappings>
+            <entity-mapping>
+                <alert-target-field>cuenta</alert-target-field>
+                <incident-field>cuenta</incident-field>
+            </entity-mapping>
+            <entity-mapping>
+                <alert-target-field>userBE</alert-target-field>
+                <incident-field>userBE</incident-field>
+            </entity-mapping>
+        </entity-mappings>
+        <expiration period="180" timeUnit="DAYS"/>
+        <incident-type>ConsultaCuenta</incident-type>
+        <never-expire>true</never-expire>
+        <rule-id>R01_Regla_Consulta_Cuenta</rule-id>
+        <scoring-rules>
+            <rule>
+                <condition name="condition">
+                    <value>true</value>
+                </condition>
+                <score>10</score>
+            </rule>
+        </scoring-rules>
+    </incident-scoring-configuration>
+    <modified-by>ic_admin</modified-by>
+    <name>TargetConsultarCuentas</name>
+</scoring-configuration>

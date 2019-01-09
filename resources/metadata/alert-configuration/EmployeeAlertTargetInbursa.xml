@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alert-configuration version="513030">
+    <alert-severities/>
+    <description>Employee Alert Target Inbursa</description>
+    <display-name>Employee Alert Target Inbursa</display-name>
+    <incident-accumulation/>
+    <name>EmployeeAlertTargetInbursa</name>
+</alert-configuration>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dashboard version="513040">
+    <dashboard-column>
+        <report-dashlet override-custom-filters="true">
+            <additional-filters/>
+            <limit-number-of-records>true</limit-number-of-records>
+            <panel-settings>
+                <title>Basic Incident Report</title>
+            </panel-settings>
+            <parameters/>
+            <record-limit>20</record-limit>
+            <report-name>basic_incident_report</report-name>
+            <time-frame-filter>
+                <field-id>timestamp</field-id>
+                <time-frame>
+                    <commonType>CURRENT_MONTH</commonType>
+                    <type>COMMONLY_USED</type>
+                </time-frame>
+            </time-frame-filter>
+            <view-type>SWITCHER_CHART_FIRST</view-type>
+        </report-dashlet>
+    </dashboard-column>
+    <dashboard-column>
+        <report-dashlet override-custom-filters="true">
+            <additional-filters/>
+            <limit-number-of-records>true</limit-number-of-records>
+            <panel-settings>
+                <title>Reporte de URLS</title>
+            </panel-settings>
+            <parameters/>
+            <record-limit>20</record-limit>
+            <report-name>interaccioncuentafact_report</report-name>
+            <time-frame-filter>
+                <field-id>timestamp</field-id>
+                <time-frame>
+                    <commonType>CURRENT_MONTH</commonType>
+                    <type>COMMONLY_USED</type>
+                </time-frame>
+            </time-frame-filter>
+            <view-type>SWITCHER_CHART_FIRST</view-type>
+        </report-dashlet>
+    </dashboard-column>
+    <date-modified>2016-09-12T10:51:25.494-05:00</date-modified>
+    <default-dashboard>true</default-dashboard>
+    <display-name>Top cuentas consultadas</display-name>
+    <homepage-dashboard>true</homepage-dashboard>
+    <modified-by>ic_admin</modified-by>
+    <name>cuentas_mas_activas</name>
+</dashboard>

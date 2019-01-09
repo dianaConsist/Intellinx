@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:integration="http://www.springframework.org/schema/integration"
+	xmlns:services="http://www.intellinx-sw.com/schema/services"
+	xmlns:utils="http://www.intellinx-sw.com/schema/utils"
+	xmlns:flow="http://www.intellinx-sw.com/schema/flow"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.intellinx-sw.com/schema/services http://www.intellinx-sw.com/schema/services/intellinx-services.xsd
+		http://www.intellinx-sw.com/schema/utils http://www.intellinx-sw.com/schema/utils/intellinx-utils.xsd
+		http://www.intellinx-sw.com/schema/flow http://www.intellinx-sw.com/schema/flow/intellinx-flow.xsd">
+
+	<!-- SERVICE DEFINITION: EventHandlerInbursa
+	
+		The service reads events from a data channel queue and maps them to bom entities.
+		The service persists these entities, and executes a set of rules on each entity. The invoked rules which are being invoked
+		are all the registered functions that are registered in the rules-repository. In addition to flow rules,
+		the repository can contain basic functions to invoke as well.
+		
+		SEVERAL TYPES OF ENTITIES CAN BE CREATED ACCORDING TO A CERTAIN CONDITION:
+			<utils:conditional-entity-resolver switch-expression="%{event_type}" ...> ==> here The condition is the event type.
+			The result of the condition will be is used as a key for retrieving the right mapping from the <utils:case ... /> Elements
+			
+		EVENT TO ENTITY MAPPING INSTRUCTIONS:
+			<utils:case when="Switch key possible result" entity-class="The entity class to create">
+				<utils:field-mappings>
+					<utils:field name="field in entity class" value="%{field from event}" />
+				</utils:field-mappings>
+			</utils:case>
+			
+	-->
+
+	<services:service-descriptor id="EventHandlerInbursa" group="default">
+		<services:description>EventHandlerInbursa</services:description>
+	</services:service-descriptor>
+
+	<integration:channel id="inboundChannel" />
+	
+	<services:chain input-channel="inboundChannel" retry-limit="5">
+		<services:transactional isolation="DEFAULT" propagation="REQUIRED" read-only="false" timeout="-1" transaction-manager="transactionManager"/>
+		<services:retryable-exception-classes>
+			<services:include class="com.intellinx.bom.dao.exception.EntityRetryException" />
+		</services:retryable-exception-classes>
+		
+		<services:monitored-transformer ref="entity-mapper" />
+		
+		<services:monitored-service-activator ref="bom-writer"/>
+		
+		<services:monitored-service-activator ref="flow-rules-processor" />
+		
+	</services:chain>
+	
+	<!-- ENTITY MAPPER -->
+
+	<services:map-to-entity-mapper id="entity-mapper">
+		<utils:conditional-entity-resolver switch-expression="%{event_type}"
+			autowire-by-name="true" date-format="yyyy-MM-dd HH:mm:ss.SSS">
+
+			<utils:field-mappings>
+				<utils:field name="timestamp" value="%{Timestamp}" />
+			
+
+<utils:field name="sessionId" value="%{event_session}" />
+<utils:field name="auditEvents" value="%{event_auditEvents}" /></utils:field-mappings>
+
+			<!-- case %{event_type} == EventType1 -->
+
+			<!-- case %{event_type} == EventType2 -->
+
+		
+<utils:case when="Logon Event" entity-class="com.inbursa.model.fact.UserLogOnFactInbursa">
+
+<utils:field-mappings>
+<utils:field name="userBE.userID" value="%{UserId}" />
+<utils:field name="clientIP" value="%{Client_IP}" />
+<utils:field name="dataSource" value="%{DataSource}" /></utils:field-mappings></utils:case>
+</utils:conditional-entity-resolver>
+	</services:map-to-entity-mapper>
+
+	<!-- BOM-WRITER -->
+
+	<services:bom-writer id="bom-writer" persister="defaultBomPersister" mode="PERSIST" />
+
+	<!-- FLOW-RULES-PROCESSOR -->
+
+	<services:flow-rules-processor id="flow-rules-processor" flow-repository="global-frl-repository" rules-execution-set="EmployeeRulesInbursa" />
+	
+</beans>

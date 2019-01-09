@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<flow-function>
+	<name>Regla_Consulta_Cuenta</name>
+	<description></description>
+	<return-type>Void</return-type>
+	<arguments>
+		<argument name="interaccionCuentaFact" type="InteraccionCuentaFact"></argument>
+	</arguments>
+	<attributes>
+		<attribute name="rule_template" value="Regla_Consulta_Cuenta"></attribute>
+		<attribute name="rule_configuration" value="ConfiguracionConsultas"></attribute>
+		<attribute name="incident_type" value="ConsultaCuenta"></attribute>
+	</attributes>
+	<script>
+	<![CDATA[try{
+	if(Not IsEmptyOrNull(interaccionCuentaFact.uRL)){
+		if(interaccionCuentaFact.uRL.contains(uRL)){
+			//user-section(genrateIncident){{
+			var _incident_to_generate = new ConsultaCuenta();
+			_incident_to_generate.timestamp = interaccionCuentaFact.timestamp;
+			_incident_to_generate.uRL = interaccionCuentaFact.uRL;
+			_incident_to_generate.userBE = interaccionCuentaFact.userBE;
+			_incident_to_generate.cuenta = interaccionCuentaFact.cuenta;
+			_incident_to_generate.clientIP = interaccionCuentaFact.clientIP;
+			_incident_to_generate.addDataSet("interaccionCuentaFact", {interaccionCuentaFact});
+			RuleEngine.generateIncident(_incident_to_generate);
+			//}}user-section
+		}else{
+			if(uRL == "Todas"){
+				//user-section(genrateIncident){{
+				var _incident_to_generate_1 = new ConsultaCuenta();
+				_incident_to_generate_1.timestamp = interaccionCuentaFact.timestamp;
+				_incident_to_generate_1.uRL = interaccionCuentaFact.uRL;
+				_incident_to_generate_1.userBE = interaccionCuentaFact.userBE;
+				_incident_to_generate_1.cuenta = interaccionCuentaFact.cuenta;
+				_incident_to_generate_1.clientIP = interaccionCuentaFact.clientIP;
+				_incident_to_generate_1.addDataSet("interaccionCuentaFact", {interaccionCuentaFact});
+				RuleEngine.generateIncident(_incident_to_generate_1);
+				//}}user-section
+			}
+		}
+	}
+}catch(e){
+	//user-section(execute_function){{
+	traceInfo(e.Message);
+	//}}user-section
+}
+]]></script>
+</flow-function>

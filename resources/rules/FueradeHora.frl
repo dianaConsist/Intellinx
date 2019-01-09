@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<flow-function>
+	<name>FueradeHora</name>
+	<description></description>
+	<return-type>Void</return-type>
+	<arguments>
+		<argument name="factorFueradeHora" type="FactorFueradeHora"></argument>
+	</arguments>
+	<attributes>
+		<attribute name="rule_template" value="FueradeHora"></attribute>
+		<attribute name="rule_configuration" value="ConfiguracionHorarioLabora"></attribute>
+		<attribute name="incident_type" value="IncidenteFueradeHorario"></attribute>
+	</attributes>
+	<script>
+	<![CDATA[try{
+	//user-section(do_bomLookup){{
+	var userbe_LookupDefinition = new LookupDefinition(UserBE.class);
+	userbe_LookupDefinition.setFilter("UserBE_row.userID == factorFueradeHora.usuarioBE.userId");
+	userbe_LookupDefinition.setFetchMode(FetchMode.All);
+	userbe_LookupDefinition.setChunkMode(false);
+	userbe_LookupDefinition.setStreamMode(false);
+	var userbe_lookup = lookupEntity(UserBE.class, userbe_LookupDefinition);
+	//}}user-section
+	if(userbe_lookup.next().horario == 'h1' And (factorFueradeHora.timestamp.hour < horaApertura Or factorFueradeHora.timestamp.hour > horaCierre) Or userbe_lookup.next().horario == 'h2' And (factorFueradeHora.timestamp.hour < horaApertura Or factorFueradeHora.timestamp.hour > horaCierre)){
+		//user-section(genrateIncident){{
+		var _incident_to_generate = new IncidenteFueradeHorario();
+		_incident_to_generate.usuarioAsignado = factorFueradeHora.usuarioAsignado;
+		_incident_to_generate.hora = factorFueradeHora.hora;
+		_incident_to_generate.clienIP = factorFueradeHora.clientIp;
+		_incident_to_generate.usuarioBE = factorFueradeHora.usuarioBE;
+		_incident_to_generate.addDataSet("factorFueradeHora", {factorFueradeHora});
+		RuleEngine.generateIncident(_incident_to_generate);
+		//}}user-section
+		//user-section(execute_function){{
+		traceInfo("se genero el incidente" + "aca accso a bas??");
+		//}}user-section
+	}
+}catch(e){
+	//user-section(execute_function){{
+	traceInfo(e.Message);
+	//}}user-section
+}
+]]></script>
+</flow-function>

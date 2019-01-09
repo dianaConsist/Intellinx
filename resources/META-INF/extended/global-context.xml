@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:itx-utils="http://www.intellinx-sw.com/schema/utils"
+	xmlns:flow="http://www.intellinx-sw.com/schema/flow"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.intellinx-sw.com/schema/utils http://www.intellinx-sw.com/schema/utils/intellinx-utils.xsd
+		http://www.intellinx-sw.com/schema/flow http://www.intellinx-sw.com/schema/flow/intellinx-flow.xsd">
+		
+	<!-- 
+		This is the place to add beans which will be load with the global application 
+		context. Beans declared in this file will be load only once (in contrast 
+		to to beans declared in common-jobs=context.xml). For example, this will 
+		be a good place to declare environment beans (like place holders), task executors 
+		etc. 
+	-->
+	
+	<context:component-scan base-package="example" />
+	
+	<!-- Flowable calsses scanner, which is set with the base package containing the flowable classes-->
+	<flow:flowable-class-scanner base-package="example" />
+	
+	<!-- EL functions scanner, which is set with the base package of the classes containing the EL functions-->
+	<itx-utils:el-functions-scanner base-package="example"/>
+	
+	<!-- 
+		This is the place to configure project specific JPA properties 
+		that will apply the IC database entity manager 
+	-->
+	<bean class="com.intellinx.spring.map.MapMerger">
+		<property name="targetMapBeanName" value="icAdditionalJpaPropertyMap"/>
+		<property name="map" ref="additional-project-jpa-properties-map"/>
+	</bean>
+
+	<util:map id="additional-project-jpa-properties-map">
+	</util:map>
+	
+	<!-- 
+		This is the place to configure project specific JPA properties 
+		that will apply the jobs database entity manager 
+	-->
+	<bean class="com.intellinx.spring.map.MapMerger">
+		<property name="targetMapBeanName" value="jobsAdditionalJpaPropertyMap"/>
+		<property name="map" ref="additional-project-ijm-jpa-properties-map"/>
+	</bean>
+
+	<util:map id="additional-project-ijm-jpa-properties-map">
+	</util:map>
+	
+	<!-- 
+		The following allows to override existing Formula annotation values.
+		In order to replace the exiting Formula annotation values for some entity fields, please do the following:
+		Create a new text file called "formulas.properties" in the resources/META-INF folder of the project.
+		The file should contain the key/value pairs of Formula replacements:
+		
+		EntityName.formulaFieldName=<NEW_FORMULA>
+		
+		Uncomment the following xml element.
+	 -->
+	<!-- 
+		<util:properties id="overriddenFormulas" location="classpath:META-INF/formulas.properties"/>
+	 -->
+	 
+	<!--
+		The following allows the spring to scan packages in order to automatically register annotated (Component, Service and etc) classes as beans
+		<context:component-scan base-package="...,..." >
+    		<context:exclude-filter type="annotation"
+        		expression="org.springframework.stereotype.Controller"/>
+		</context:component-scan>
+	-->
+	 
+	 <bean class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" id="MULPSII1">
+	<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+	<property name="url" value="jdbc:oracle:thin:@172.18.172.77:1530:MULPSII2" />
+	<property name="username" value="BD807339" />
+	<property name="password" value="FRam12.0Z$" />
+</bean>
+	 	 <bean class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" id="consistcloud_4306_inbursa">
+		<!-- JMARTINEZALE Ojo copiar el archivo mariadb-java-client-1.5.5.jar al directorio C:\Program Files\Intellinx\ToolSuite\Runtime\server\lib  -->
+	<property name="driverClassName" value="org.mariadb.jdbc.Driver" />
+	<!-- JMARTINEZALE Quitar este comentario cuando se abra el puerto en el meraki-->
+	 <property name="url" value="jdbc:mariadb://192.168.15.109:3306/inbursa" />
+	  
+	  <!--JMARTINEZALE  comentar la siguiente linea ya que yo estuve usando tunnel 
+	<property name="url" value="jdbc:mariadb://localhost:4306/inbursa" />-->
+	
+	<property name="username" value="root" />
+	<property name="password" value="root" />
+</bean>
+	 
+</beans>

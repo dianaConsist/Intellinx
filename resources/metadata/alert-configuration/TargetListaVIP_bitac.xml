@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alert-configuration version="513030">
+    <alert-severities/>
+    <description/>
+    <display-name>TargetListaVIP_bitac</display-name>
+    <incident-accumulation/>
+    <name>TargetListaVIP_bitac</name>
+</alert-configuration>

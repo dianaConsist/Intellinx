@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alert-configuration version="513030">
+    <alert-severities/>
+    <alert-type>AlertaUsuario</alert-type>
+    <display-name>ComportamientoUsuarioFueraHorario</display-name>
+    <fields-mappings>
+        <fields-mapping>
+            <field-name>usuarioBE</field-name>
+            <value>alert_object.usuarioBE</value>
+        </fields-mapping>
+    </fields-mappings>
+    <incident-accumulation>
+        <method>ON_EACH_ALERT_GENERATION</method>
+        <period>0</period>
+    </incident-accumulation>
+    <name>ComportamientoUsuarioFueraHorario</name>
+    <owner>ic_admin</owner>
+    <workspace>generalWorkspace</workspace>
+</alert-configuration>

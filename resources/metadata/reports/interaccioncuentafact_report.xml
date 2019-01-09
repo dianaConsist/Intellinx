@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report version="513040">
+    <created-by>ic_admin</created-by>
+    <custom-filters/>
+    <date-created>2016-09-12T10:42:53.386-05:00</date-created>
+    <date-modified>2016-09-12T10:50:38.799-05:00</date-modified>
+    <display-name>Reporte de URLS</display-name>
+    <drilldown-reports/>
+    <folder-name>Public Reports</folder-name>
+    <format>tabular</format>
+    <limit-result-number>true</limit-result-number>
+    <line-decorations/>
+    <modified-by>ic_admin</modified-by>
+    <module>InteraccionCuentaFact</module>
+    <name>interaccioncuentafact_report</name>
+    <new-chart>
+        <name>chart</name>
+        <type>VerticalBar</type>
+        <title>Lista de URLS</title>
+        <horizontal-text-axis/>
+        <vertical-axis/>
+        <x-axis-field-id>url_0</x-axis-field-id>
+        <data-series-list>
+            <data-series>
+                <field-id>id_0</field-id>
+                <name>Count of ID</name>
+            </data-series>
+        </data-series-list>
+    </new-chart>
+    <parameters/>
+    <query>
+        <columns>
+            <column>
+                <browserDefineWidth>false</browserDefineWidth>
+                <expression>cuenta</expression>
+                <name>cuenta_0</name>
+            </column>
+            <column>
+                <aggregate-function>COUNT</aggregate-function>
+                <browserDefineWidth>false</browserDefineWidth>
+                <expression>id</expression>
+                <name>id_0</name>
+            </column>
+            <column>
+                <browserDefineWidth>false</browserDefineWidth>
+                <expression>uRL</expression>
+                <name>url_0</name>
+            </column>
+            <column>
+                <browserDefineWidth>false</browserDefineWidth>
+                <expression>userBE.nombreEmpleado</expression>
+                <name>nombreempleado_0</name>
+            </column>
+        </columns>
+        <criteria/>
+        <group-by>true</group-by>
+        <order-by/>
+    </query>
+    <result-number>20</result-number>
+    <show-more-info>false</show-more-info>
+    <view>report and chart</view>
+</report>
